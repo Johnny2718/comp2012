@@ -23,13 +23,15 @@ Sushi::Sushi(const Sushi& s){
     _price=s._price;
 }
 void Sushi::clone(const Sushi& s){
-    if (s._name==nullptr) this->_name=nullptr;
-    else
-    {
-        _name=new char[strlen(s._name)+1];
-        strcpy(_name,s._name);
+    delete[] _name;
+    if (s._name == nullptr) {
+        _name = nullptr;
     }
-    _price=s._price;
+    else {
+        _name = new char[strlen(s._name) + 1];
+        strcpy(_name, s._name);
+    }
+    _price = s._price;
 }
 
 

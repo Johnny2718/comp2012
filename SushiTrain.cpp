@@ -12,28 +12,43 @@ SushiTrain::SushiTrain(int capacity): _capacity(capacity){
 SushiTrain::SushiTrain(const Sushi sushi[],int numSushi): _capacity(numSushi){
     _sushi=new Sushi[numSushi];
     for (int i =0 ;i<numSushi;i++){
-        _sushi[i]=sushi[i];
+        _sushi[i].clone(sushi[i]);
     }
     _numSushi=numSushi;
 }
-SushiTrain::SushiTrain(const SushiTrain& st) :_capacity(st._capacity){
+SushiTrain::SushiTrain(const SushiTrain& st) : SushiTrain::SushiTrain(st._capacity){
     _numSushi=st._numSushi;
-    _sushi->clone(*st._sushi);
+    for (int i=0;i<_numSushi;i++){
+        _sushi[i].clone(st._sushi[i]);
+    }
 }
 void SushiTrain::addSushi(const Sushi& s){
     if(_capacity==_numSushi) cout << "Insufficient capacity" << endl;
     else
     {
-        _sushi[_numSushi].clone(s);
-        _numSushi++;
+        Sushi* p=new Sushi[_numSushi+1];
+        for (int i =0 ;i<_numSushi;i++){
+            p[i].clone(_sushi[i]);
+        }
+        p[_numSushi].clone(s);
+        Sushi* temp=_sushi;
+        _sushi=p;
+        delete [] temp; 
+        _numSushi++; 
     } 
 }
 void SushiTrain::removeLastSushi(){
     if(_numSushi==0) cout << "No sushi can be removed" << endl;
     else{
-        _sushi[_numSushi].~Sushi();
-        _numSushi-=1;
-    } 
+        Sushi* p=new Sushi[_numSushi];
+        for (int i =0 ;i<_numSushi-1;i++){
+            p[i].clone(_sushi[i]);
+        }
+        Sushi* temp=_sushi;
+        _sushi=p;
+        _numSushi--; 
+        delete [] temp; 
+    }
 }
 int SushiTrain::totalPrice()const{
     int total=0;
